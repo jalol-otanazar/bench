@@ -28,23 +28,30 @@ This benchmark is built to surface those failures.
 - `benchmark/corpus/` - the source documents used for grounding
 - `benchmark/questions.jsonl` - benchmark questions and answer keys
 - `benchmark/eval.py` - simple evaluation script for model outputs
+- `benchmark/benchmark_spec.md` - benchmark design notes and evaluation goals
 
 ## Output format
 
 Model outputs should be saved as JSON Lines, one prediction per question:
 
 ```json
-{"id":"E1","answer":"USD 60 per day","citations":["policies.md"]}
+{"id":"E1","answer":"Borealis","citations":["benchmark/corpus/incident_borealis.md"]}
 ```
 
 The `citations` field is optional but recommended.
+
+## Run the evaluator
+
+```bash
+python benchmark/eval.py --gold benchmark/questions.jsonl --predictions your_predictions.jsonl
+```
 
 ## Scoring idea
 
 The helper script is intentionally simple and opinionated:
 
 - exact retrieval and structured questions are scored by answer match
-- multi-hop and refusal questions allow keyword-based partial validation
-- citation presence can be checked separately if your system emits sources
+- multi-hop and refusal questions allow keyword-based validation
+- citation presence is checked separately if your system emits sources
 
 This benchmark is meant to be a living repo. Add harder documents, more ambiguous distractors, and new question families as your RAG system improves.
